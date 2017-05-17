@@ -187,7 +187,7 @@ print(hex(213))#转换为十六进制
 
 def zyg(z):#定义函数
     if not isinstance(z, (int, float)):#数据类型检查
-        raise TypeError('bad operand type')#自动检查出来，并抛出TypeError
+        raise TypeError('bad operand type')#自动检查出来，并抛出TypeError,还有ValueError
     if z > 0:
         return z,-z
     else:
@@ -840,7 +840,7 @@ def readImage(fp):
     
 #面向对象高级编程
     #1.使用__slots__
-
+'''
 class Dog(object):
     __slots__ = ('age', 'name','set_age','len')
 d = Dog()
@@ -864,8 +864,94 @@ d.len = 100
 #__slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的
 #在子类中也定义__slots__，这样，
 #子类实例允许定义的属性就是自身的__slots__加上父类的__slots__。
+'''
+    #2.使用@property,装饰器就是负责把一个方法变成属性调用的
+'''
+class Student(object):
+    @property
+    def score(self):
+        return self._score
 
-    #2.使用@property
+    @score.setter
+    def score(self, value):
+        if not isinstance(value, int):
+            raise ValueError('score is not integer!')
+        if value < 0 or value > 100:
+            raise ValueError('score is not in 0~100!')
+        self._score = value
+
+s = Student()
+s.score = 66
+x = s.score
+'''
+    #3.多重继承MixIn
+'''
+class Boy(object):
+    pass
+class Girl(object):
+    pass
+
+class Student(object, Boy):
+    pass
+#由于Python允许使用多重继承，因此，MixIn就是一种常见的设计。
+#只允许单一继承的语言（如Java）不能使用MixIn的设计
+'''
+
+    #4.定制类
+'''
+#__str__(self):作用于print()的显示内容
+#__reper__(self):__str__()返回用户看到的字符串，而__repr__()返回程序开发者看到的字符串
+
+#__iter__(self):返回一个迭代对象，然后，Python的for循环就会不断调用该迭代对象的__next__()方法
+#拿到循环的下一个值，直到遇到StopIteration错误时退出循环
+
+#__getitem__(self, value):>>> f = Fib(),#>>> f[0]
+#__setitem__()
+#__delitem__()
+
+#__call__()>>> s = Student('Michael'),>>> s() # self参数不要传入
+#__call__()还可以定义参数。对实例进行直接调用就好比对一个函数进行调用一样，
+#所以你完全可以把对象看成函数，把函数看成对象，因为这两者之间本来就没啥根本的区别。
+#如果你把对象看成函数，那么函数本身其实也可以在运行期动态创建出来，
+#因为类的实例都是运行期创建出来的，这么一来，我们就模糊了对象和函数的界限。
+#那么，怎么判断一个变量是对象还是函数呢？其实，更多的时候，我们需要判断一个对象是否能被调用，
+#能被调用的对象就是一个Callable对象，比如函数和我们上面定义的带有__call__()的类实例：
+#>>> callable(Student())
+#True
+
+#__getatter__()
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+    def __getattr__(self, attr):
+        if attr == 'score':
+            return 66#返回函数也是完全可以的
+
+s = Student('zz')
+print(s.name)
+print(s.score)
+'''
+    #5. 枚举类
+
+from enum improt Enum
+Month = Enum('Month',(''Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec''))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
